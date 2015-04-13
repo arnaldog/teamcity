@@ -1,22 +1,7 @@
-
-# Project Build agent
-#
-# Requirements:
-#   - solr
-#   - redis server
-#   - mysql
-#   - 
-#
 solr:
   image: makuk66/docker-solr
   ports:
     - '8983:8983'
-
-serf:
-  image: ctcl/serf
-  ports:
-    - "7373"
-    - "7946"
 
 redis:
   image: dockerfile/redis
@@ -27,28 +12,32 @@ memcached:
   image: tutum/memcached
   ports:
     - '11211:11211'
+  environment:
+    - MEMCACHED_PASS=""
 
 mysql:
   image: 'mysql:5.5'
   environment:
-    - MYSQL_ROOT_PASSWORD='none'
+    - MYSQL_ALLOW_EMPTY_PASSWORD='yes'
   ports:
     - '3306:3306'
 
-teamcity_server:
-  image: 'teamcity-server'
+server:
+  image: 'server_teamcity'
   ports:
     - '8111:8111'
 
-teamcity_railsagent:
-  image: 'teamcity-railsagent'
+agent:
+  image: 'agent_teamcity'
+  environment:
+    - 'TEAMCITY_SERVER=http://192.168.59.103:8111'
   ports:
     - '9090:9090' 
   links:
     - mysql
     - memcached
-    - server
     - redis
+    - solr
 
 
 

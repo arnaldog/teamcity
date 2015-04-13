@@ -15,6 +15,7 @@ VOLUME  ["/data/teamcity"]
 ENV TEAMCITY_DATA_PATH /data/teamcity
 #
 # # Download and install TeamCity to /opt
+RUN apt-get update
 RUN apt-get install -y -q \
     build-essential \
     wget \
@@ -28,13 +29,8 @@ tar zxf $TEAMCITY_PACKAGE -C /opt && \
 rm -rf $TEAMCITY_PACKAGE
 
 # Github teamcity plugin
+ADD http://teamcity.jetbrains.com/guestAuth/repository/download/bt398/lastest.lastSuccessful/teamcity.github.zip /data/teamcity/plugins/teamcity.github.zip
 
-RUN wget http://teamcity.jetbrains.com/guestAuth/repository/download/bt398/lastest.lastSuccessful/teamcity.github.zip && \
-    mkdir -p $TEAMCITY_DATA_PATH/plugins && \
-    mv teamcity.github.zip  $TEAMCITY_DATA_PATH/plugins
-
-# MYSQL
-#RUN wget  http://dev.mysql.com/downloads/connector/ ->  /data/teamcity/lib/jdbc
 EXPOSE 8111
 CMD ["/opt/TeamCity/bin/teamcity-server.sh", "run"]
 
