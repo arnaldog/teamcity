@@ -1,17 +1,17 @@
 solr:
-  image: makuk66/docker-solr
+  image: makuk66/docker-solr:4.10.4
   ports:
-    - '8983:8983'
+    - '8983'
 
 redis:
   image: dockerfile/redis
   ports:
-    - '6379:6379'
+    - '6379'
 
 memcached:
   image: tutum/memcached
   ports:
-    - '11211:11211'
+    - '11211'
   environment:
     - MEMCACHED_PASS=""
 
@@ -20,24 +20,22 @@ mysql:
   environment:
     - MYSQL_ALLOW_EMPTY_PASSWORD='yes'
   ports:
-    - '3306:3306'
+    - '3306'
 
 server:
   image: 'server_teamcity'
   ports:
-    - '8111:8111'
+    - '8111'
 
 agent:
   image: 'agent_teamcity'
   environment:
-    - 'TEAMCITY_SERVER=http://192.168.59.103:8111'
+    - 'TEAMCITY_SERVER=http://192.168.50.103:8111'
   ports:
-    - '9090:9090' 
+    - '9090' 
   links:
     - mysql
     - memcached
     - redis
     - solr
-
-
 
