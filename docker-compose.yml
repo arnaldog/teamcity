@@ -1,8 +1,10 @@
 solr:
-  image: makuk66/docker-solr:4.10.4
+  image: 'makuk66/docker-solr:4.10.4'
+  user: root
   ports:
-    - '8983'
-
+    - '8080:8983'
+  volumes:
+    - ~/data/solr:/opt/solr/example/solr
 redis:
   image: dockerfile/redis
   ports:
@@ -17,17 +19,21 @@ memcached:
 
 mysql:
   image: 'mysql:5.5'
+  expose:
+    - 3306
   environment:
-    - MYSQL_ALLOW_EMPTY_PASSWORD='yes'
-  ports:
-    - '3306'
-
-server:
+    - 'MYSQL_ALLOW_EMPTY_PASSWORD=true'
+  volumes_from:
+    - data
+  
+teamcityserver:
   image: 'server_teamcity'
   ports:
     - '8111'
+  volumes_from:
+    - data
 
-agent:
+teamcityagent:
   image: 'agent_teamcity'
   environment:
     - 'TEAMCITY_SERVER=http://192.168.50.103:8111'
@@ -39,3 +45,9 @@ agent:
     - redis
     - solr
 
+data:
+  image: busybox
+  command: /bin/true
+  volumes:
+    - /var/lib/mysql
+    - ~/data/solr:/opt/solr/example/solr
