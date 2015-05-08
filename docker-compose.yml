@@ -9,6 +9,8 @@ redis:
   image: dockerfile/redis
   ports:
     - '6379'
+  volumes_from:
+    - data
 
 memcached:
   image: tutum/memcached
@@ -20,23 +22,26 @@ memcached:
 mysql:
   image: 'mysql:5.5'
   expose:
-    - 3306
+    - '3306'
   environment:
     - 'MYSQL_ALLOW_EMPTY_PASSWORD=true'
   volumes_from:
     - data
   
-teamcityserver:
+teamcity:
   image: 'server_teamcity'
   ports:
-    - '8111'
+    - '8111:8111'
   volumes_from:
     - data
+    - sshdata
+  links:
+    - mysql:mysql
 
-teamcityagent:
+agent:
   image: 'agent_teamcity'
   environment:
-    - 'TEAMCITY_SERVER=http://192.168.50.103:8111'
+    - 'TEAMCITY_SERVER=http://192.168.59.103:8111'
   ports:
     - '9090' 
   links:
@@ -44,6 +49,14 @@ teamcityagent:
     - memcached
     - redis
     - solr
+  volumes_from:
+    - sshdata
+
+sshdata:
+  image: busybox
+  command: /bin/true
+  volumes:
+    - ~/.ssh:/root/.ssh
 
 data:
   image: busybox
@@ -51,3 +64,5 @@ data:
   volumes:
     - /var/lib/mysql
     - ~/data/solr:/opt/solr/example/solr
+    - ~/data/redis:/data
+    - ~/data/teamcity:/data/teamcity
