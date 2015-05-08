@@ -1,8 +1,8 @@
 solr:
   image: 'makuk66/docker-solr:4.10.4'
   user: root
-  ports:
-    - '8080:8983'
+  expose:
+    - '8983'
   volumes:
     - ~/data/solr:/opt/solr/example/solr
 redis:
