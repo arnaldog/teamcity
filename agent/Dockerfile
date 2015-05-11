@@ -30,6 +30,7 @@ RUN apt-get install -y -q \
     libssl-dev \
     libpng-dev \
     libjpeg-dev \
+    node-legacy \
     nodejs \
     npm
 
@@ -47,9 +48,10 @@ RUN /bin/bash -l -c "rvm 2.1.2 do gem install bundler --no-ri --no-rdoc"
 RUN /bin/bash -l -c "rvm 2.2.1 do gem install bundler --no-ri --no-rdoc"
 
 # Phantomjs
-RUN npm install -g phantomjs & \
-    ln -s /usr/share/lib/node_modules/phantomjs/lib/phantom /usr/share/phantomjs & \
-    ln -s /usr/share/phantomjs /usr/bin/phantomjs
+
+RUN npm install phantomjs --phantomjs_cdnurl=http://cnpmjs.org/downloads \
+    ln -s /node_modules/.bin/phantomjs  /usr/bin/phantomjs \
+    ln -s /node_modules/.bin/phantomjs  /usr/sbin/phantomjs
 
 EXPOSE 9090
 ADD setup-agent.sh /setup-agent.sh
