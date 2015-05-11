@@ -44,7 +44,7 @@ agent:
   environment:
     - 'TEAMCITY_SERVER=http://teamcity:8111'
     - 'DEFAULT_RUBIES=2.2.1 1.9.3'
-    - 'DEAULT_GEMSETS=app1 app2'
+    - 'DEFAULT_GEMSETS=development production'
   ports:
     - '9090' 
   links:

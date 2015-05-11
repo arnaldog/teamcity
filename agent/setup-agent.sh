@@ -10,7 +10,7 @@ if [ ! -z "$DEFAULT_RUBIES" ]; then
   echo $DEFAULT_RUBIES | xargs ruby -e "puts ARGV" | xargs rvm install
 fi
 if [ ! -z "$DEFAULT_GEMSETS" ]; then
-  rvm all do rvm gemset create "$DEFAULT_GEMSETS"
+  rvm all do rvm gemset create $DEFAULT_GEMSETS
 fi
 
 rvm all-gemsets do gem install bundler
