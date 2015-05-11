@@ -30,7 +30,7 @@ RUN apt-get install -y -q \
     libssl-dev \
     libpng-dev \
     libjpeg-dev \
-    node-legacy \
+    nodejs-legacy \
     nodejs \
     npm
 
@@ -42,15 +42,10 @@ RUN \curl -L https://get.rvm.io | bash -s stable
 ENV PATH /usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN /bin/bash -l -c "rvm requirements"
-RUN /bin/bash -l -c "rvm install 2.2.1"
-RUN /bin/bash -l -c "rvm install 2.1.2"
-RUN /bin/bash -l -c "rvm 2.1.2 do gem install bundler --no-ri --no-rdoc"
-RUN /bin/bash -l -c "rvm 2.2.1 do gem install bundler --no-ri --no-rdoc"
+RUN /bin/bash -l -c "rvm install 2.1.2" 
 
-# Phantomjs
-
-RUN npm install phantomjs --phantomjs_cdnurl=http://cnpmjs.org/downloads \
-    ln -s /node_modules/.bin/phantomjs  /usr/bin/phantomjs \
+RUN npm install phantomjs --phantomjs_cdnurl=http://cnpmjs.org/downloads
+RUN ln -s /node_modules/.bin/phantomjs  /usr/bin/phantomjs & \
     ln -s /node_modules/.bin/phantomjs  /usr/sbin/phantomjs
 
 EXPOSE 9090

@@ -6,7 +6,7 @@ solr:
   volumes:
     - ~/data/solr:/opt/solr/example/solr
 redis:
-  image: dockerfile/redis
+  image: library/redis
   ports:
     - '6379'
   volumes_from:
@@ -30,6 +30,7 @@ mysql:
   
 teamcity:
   build: ./server
+  user: root
   ports:
     - '8111:8111'
   volumes_from:
@@ -41,7 +42,9 @@ teamcity:
 agent:
   build: ./agent
   environment:
-    - 'TEAMCITY_SERVER=http://192.168.59.103:8111'
+    - 'TEAMCITY_SERVER=http://teamcity:8111'
+    - 'DEFAULT_RUBIES=2.2.1 1.9.3'
+    - 'DEAULT_GEMSETS=app1 app2'
   ports:
     - '9090' 
   links:
